@@ -736,10 +736,7 @@ class SAFRSRestAPI(Resource, object):
         #method_name = kwargs.get('method_name','')
 
         if id:
-            # Retrieve the instance with the provided id
             instance = self.SAFRSObject.get_instance(id)
-            if not instance:
-                raise ValidationError('Invalid {}'.format(self.object_id))
 
             for rel in instance.__mapper__.relationships:
                 #log.debug('relationship : {}, {}'.format(rel, rel.key))
@@ -768,7 +765,6 @@ class SAFRSRestAPI(Resource, object):
         '''
             Create or update the object specified by id
         '''
-
         id = kwargs.get(self.object_id, None)
         if not id:
             raise ValidationError('Invalid ID')
@@ -784,7 +780,7 @@ class SAFRSRestAPI(Resource, object):
 
         attributes = data.get('attributes',{})
         attributes['id'] = id
-
+        
         # Create the object instance with the specified id and json data
         # If the instance (id) already exists, it will be updated with the data
         instance = self.SAFRSObject.get_instance(id)
@@ -845,7 +841,6 @@ class SAFRSRestAPI(Resource, object):
               not among the type(s) that constitute the collection represented by the endpoint.
               A server SHOULD include error details and provide enough information to recognize the source of the conflict.
         '''
-
         payload = self.get_json()
         method_name = payload.get('meta',{}).get('method', None)
 
@@ -1012,7 +1007,6 @@ class SAFRSRestMethodAPI(Resource, object):
         '''
             HTTP POST: apply actions, return 200 regardless
         '''
-
         id = kwargs.get(self.object_id, None)
 
         if id != None:
@@ -1212,7 +1206,6 @@ class SAFRSRestRelationshipAPI(Resource, object):
         result = { 'data' : result, 'links' : { 'self' : request.url } }
         return jsonify(result)
 
-
     def patch(self, **kwargs):
         '''
             Update or create a relationship child item
@@ -1227,9 +1220,6 @@ class SAFRSRestRelationshipAPI(Resource, object):
                 The PATCH request MUST include a top-level member named data containing one of:
                 a resource identifier object corresponding to the new related resource.
                 null, to remove the relationship.
-
-
-
         '''
         parent, relation = self.parse_args(**kwargs)
 

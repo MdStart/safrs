@@ -213,10 +213,9 @@ class SAFRSBase(Model):
     def _s_relationships(self):
         return self.__mapper__.relationships
 
-    def _s_patch(self, **kwargs):
-        for attr in self._s_column_names:
-            value = kwargs.get(attr,None)
-            if value != None:
+    def _s_patch(self, **attributes):
+        for attr, value in attributes.items():
+            if attr in self._s_column_names:
                 setattr(self, attr, value)
     
     @classmethod

@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*
 # Exception Handlers
 #
-# The application loglevel determines the level of detail dhown to the user.
+# The application loglevel determines the level of detail down to the user.
 # If set to debug, too much sensitive info might be shown !
 #
 import traceback
@@ -23,7 +23,6 @@ class NotFoundError(Exception, DontWrapMixin):
         Exception.__init__(self)
         
         if log.getEffectiveLevel() == logging.DEBUG:
-        
             self.message = message
             log.error('Not found: {}'.format(message))
         
