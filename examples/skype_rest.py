@@ -23,7 +23,10 @@ __builtin__.app = app
 app.config.update( SQLALCHEMY_DATABASE_URI = 'sqlite:///'+sys.argv[2],         
                    DEBUG = True)
 
-db = SQLAlchemy(app)
+
+db = SQLAlchemy(app, model_class= SAFRSBase)
+__builtin__.db  = db
+
 
 def expose_tables():
     from sqlalchemy.orm import scoped_session
@@ -35,9 +38,9 @@ def expose_tables():
     
     for table in Base.classes:
 
-        print(table)
+        print('Exposing table {} '.format(table))
 
-        sclass = type(str(table.__table__.name), (SAFRSBase, table), 
+        sclass = type(str(table.__table__.name), (SAFRSBase,), 
                       dict(__tablename__ = table.__table__.name, _table = table))
 
         session = scoped_session(sessionmaker(bind=db.engine))
@@ -51,7 +54,6 @@ PORT = 5000
 ma = Marshmallow(app)
 
 # We need some cross-module global variables to be set
-__builtin__.db  = db
 __builtin__.log =  app.logger
 __builtin__.ma  = ma
 # Create the database
